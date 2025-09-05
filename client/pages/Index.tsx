@@ -14,11 +14,24 @@ export default function Index() {
             </div>
             <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight">
               Edu Bridge
-              <span className="block bg-gradient-to-r from-primary via-sky-500 to-violet-500 bg-clip-text text-transparent">Mentorship · AI · Careers</span>
+              <div
+                style={{
+                  display: "block",
+                  backgroundClip: "text",
+                  backgroundImage:
+                    "linear-gradient(to right, rgb(76, 62, 204), rgb(14, 165, 233), rgb(139, 92, 246))",
+                  color: "rgba(0, 0, 0, 0)",
+                  fontWeight: 800,
+                }}
+              >
+                Mentorship · AI · Careers
+              </div>
             </h1>
-            <p className="mt-4 text-muted-foreground text-lg max-w-prose">
-              A multi‑feature frontend bundling BridgeHub, CodeTranslate AI, Explainer Bot, and Career Explorer — ready for backend integration.
-            </p>
+            <div className="mt-4 text-muted-foreground text-lg max-w-prose" style={{ lineHeight: '28px' }}>
+              <p>
+                This all-in one empowers you with learning, mentorship, career growth and interactive AI tools in single place
+              </p>
+            </div>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild><Link to="/bridgehub">Explore BridgeHub</Link></Button>
               <Button variant="secondary" asChild><Link to="/code-translate">Try CodeTranslate</Link></Button>
@@ -34,7 +47,22 @@ export default function Index() {
       <section className="container grid md:grid-cols-2 lg:grid-cols-4 gap-6 pb-20">
         {features.map((f) => (
           <Link key={f.href} to={f.href} className="group rounded-xl border bg-card p-6 ring-1 ring-transparent transition hover:shadow-md">
-            <div className={`h-10 w-10 rounded-md ${f.bg}`}></div>
+            {f.title === "CodeTranslate AI" ? (
+              <div
+                style={{
+                  backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F3836f58560d244d4a3b3249f2c315c31%2F7a11988336804595b15800aebc0001e7)",
+                  borderRadius: 6,
+                  fontWeight: 400,
+                  height: 40,
+                  width: 40,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                }}
+              />
+            ) : (
+              <div className={`h-10 w-10 rounded-md ${f.bg}`}></div>
+            )}
             <h3 className="mt-4 font-semibold text-lg">{f.title}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
             <span className="mt-4 inline-flex items-center text-sm text-primary">Open →</span>
