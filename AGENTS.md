@@ -12,7 +12,7 @@ While the starter comes with a express server, only create endpoint when strictl
 - **Testing**: Vitest
 - **UI**: Radix UI + TailwindCSS 3 + Lucide React icons
 
-## Project Structure
+## Project Structure muksh
 
 ```
 client/                   # React SPA frontend
