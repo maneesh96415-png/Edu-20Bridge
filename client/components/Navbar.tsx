@@ -12,7 +12,7 @@ export function Navbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2 font-extrabold tracking-tight">
-            <span className="inline-block h-7 w-7 rounded-md bg-gradient-to-br from-primary to-sky-500"></span>
+            <img src="/edubridge_logo.png" alt="EduBridge Logo" className="h-8 w-8 rounded-md object-cover ring-1 ring-border" />
             <span className="text-lg">Edu Bridge</span>
           </Link>
           <nav className="hidden md:flex items-center gap-4 text-sm text-muted-foreground">

@@ -36,6 +36,19 @@ function basicSyntaxCheck(lang: string, code: string): string | null {
   return null;
 }
 
+function cleanTypeScript(code: string): string {
+  let js = code;
+  // 1. Remove interface declarations
+  js = js.replace(/interface\s+[A-Za-z_]\w*\s*\{[^}]*\}/g, "");
+  // 2. Remove type alias declarations
+  js = js.replace(/type\s+[A-Za-z_]\w*\s*=\s*[^;]+;/g, "");
+  // 3. Remove inline type casting (e.g., "as string" or "as any")
+  js = js.replace(/\s+as\s+[A-Za-z_]\w*(?:<[^>]+>)?(?:\[\])*/g, "");
+  // 4. Remove parameter and variable type annotations
+  js = js.replace(/:\s*(?:number|string|boolean|any|void|object|unknown|never|symbol|bigint|string\[\]|number\[\]|boolean\[\]|[A-Z]\w*)(?:\s*\|\s*(?:number|string|boolean|any|void|object|unknown|never|symbol|bigint|string\[\]|number\[\]|boolean\[\]|[A-Z]\w*))*/g, "");
+  return js;
+}
+
 export default function CodeTranslatePage() {
   const [from, setFrom] = useState("python");
   const [to, setTo] = useState("java");
@@ -71,39 +84,12 @@ export default function CodeTranslatePage() {
     code: string,
     setOut: (v: string) => void,
   ) => {
-    setOut("");
-    // JS/TS execution available in browser (TS transpiled roughly by Monaco but we'll run as JS)
-    if (lang === "javascript" || lang === "typescript") {
-      try {
-        const logs: string[] = [];
-        const origLog = console.log;
-        console.log = (...args: any[]) => {
-          logs.push(args.map((a) => String(a)).join(" "));
-          origLog(...args);
-        };
-        try {
-          // eslint-disable-next-line no-new-func
-          const fn = new Function(code);
-          const result = fn();
-          if (result !== undefined) logs.push(String(result));
-        } finally {
-          console.log = origLog;
-        }
-        setOut(logs.length ? logs.join("\n") : "(no output)");
-      } catch (err: any) {
-        setOut(`Runtime error: ${err?.message ?? String(err)}`);
-      }
-      return;
-    }
-
-    // For other languages perform a lightweight syntax check only
-    const err = basicSyntaxCheck(lang, code);
-    if (err) {
-      setOut(`Syntax check failed: ${err}`);
-    } else {
-      setOut(
-        "Run not available for this language in-browser; syntax looks OK.",
-      );
+    setOut("Running...");
+    try {
+      const output = await CodeTranslateAPI.run(code, lang);
+      setOut(output || "(no output)");
+    } catch (err: any) {
+      setOut(`Execution error: ${err?.message ?? String(err)}`);
     }
   };
 
@@ -122,9 +108,9 @@ export default function CodeTranslatePage() {
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F3836f58560d244d4a3b3249f2c315c31%2F7b696e140b7644efbfb186147da823e2?format=webp&width=800"
+              src="/logo_codetranslate.png"
               alt="CodeTranslate"
-              className="h-12 w-12 rounded-md object-cover shadow-sm"
+              className="h-12 w-12 rounded-md object-cover shadow-sm ring-1 ring-border"
             />
             <div>
               <h3 className="text-lg font-semibold">CodeTranslate AI</h3>

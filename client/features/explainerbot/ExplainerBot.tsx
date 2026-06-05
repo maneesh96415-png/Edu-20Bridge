@@ -54,8 +54,15 @@ export default function ExplainerBotPage() {
                 </select>
               </div>
             </div>
-            <div className="mt-3 aspect-video rounded-md border bg-muted flex items-center justify-center text-muted-foreground">
-              <span>Preview slide {page}</span>
+            <div className="mt-3 aspect-video rounded-md border bg-muted flex flex-col items-center justify-center text-muted-foreground relative overflow-hidden">
+              <img 
+                src="/slide_placeholder.png" 
+                alt={`Preview slide ${page}`} 
+                className="absolute inset-0 w-full h-full object-cover opacity-85"
+              />
+              <div className="absolute bottom-2 left-2 bg-black/70 px-3 py-1 rounded text-xs text-white">
+                Slide {page}
+              </div>
             </div>
           </div>
           <div className="rounded-lg border p-4">

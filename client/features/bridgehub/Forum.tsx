@@ -17,7 +17,7 @@ export default function ForumPage() {
   };
 
   const vote = (id: string, delta: number) => setPosts((p)=> p.map(x => x.id===id? { ...x, votes: x.votes + delta }: x));
-  const accept = (id: string) => setPosts((p)=> p.map(x => ({ ...x, accepted: x.id===id })));
+  const accept = (id: string) => setPosts((p)=> p.map(x => x.id===id? { ...x, accepted: !x.accepted } : x));
 
   return (
     <div className="container py-10">

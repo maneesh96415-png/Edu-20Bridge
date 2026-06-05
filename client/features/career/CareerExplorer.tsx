@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ContactAPI } from "@/services/api";
+import { toast } from "sonner";
 
 const streams = ["Engineering","Medicine","Commerce","Arts","Vocational","Govt Jobs","Entrepreneurship"];
 
@@ -16,6 +18,30 @@ export default function CareerExplorerPage() {
   const [interest, setInterest] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !interest.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const res = await ContactAPI.submit(name, email, interest);
+      toast.success(res.message || "Thank you! We will contact you soon.");
+      setName("");
+      setEmail("");
+      setInterest("");
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to submit. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="container py-10">
@@ -56,10 +82,12 @@ export default function CareerExplorerPage() {
         <div className="rounded-xl border p-6">
           <h3 className="font-semibold">Contact Us</h3>
           <div className="mt-3 grid gap-2">
-            <Input placeholder="Name" value={name} onChange={(e)=> setName(e.target.value)} />
-            <Input placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)} />
-            <Input placeholder="Your interest" value={interest} onChange={(e)=> setInterest(e.target.value)} />
-            <Button className="mt-2">Submit</Button>
+            <Input placeholder="Name" value={name} onChange={(e)=> setName(e.target.value)} disabled={submitting} />
+            <Input placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)} disabled={submitting} />
+            <Input placeholder="Your interest" value={interest} onChange={(e)=> setInterest(e.target.value)} disabled={submitting} />
+            <Button className="mt-2" onClick={handleSubmit} disabled={submitting}>
+              {submitting ? "Submitting..." : "Submit"}
+            </Button>
           </div>
         </div>
       </div>

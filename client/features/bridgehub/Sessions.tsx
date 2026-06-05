@@ -24,6 +24,9 @@ export default function SessionsPage() {
         {weekdays.map((d) => (<div key={d} className="py-1">{d}</div>))}
       </div>
       <div className="grid grid-cols-7 gap-2">
+        {Array.from({ length: start.getDay() }).map((_, i) => (
+          <div key={`empty-${i}`} className="aspect-square" />
+        ))}
         {days.map((d) => (
           <button key={d.toISOString()} onClick={()=> setSelected(d)} className={`aspect-square rounded-md border p-2 text-left hover:shadow-sm ${selected?.toDateString()===d.toDateString()?"ring-2 ring-primary":""}`}>
             <div className="text-sm">{format(d, "d")}</div>

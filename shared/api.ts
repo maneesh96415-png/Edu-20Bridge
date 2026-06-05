@@ -10,3 +10,25 @@
 export interface DemoResponse {
   message: string;
 }
+
+export interface Mentor {
+  id: string;
+  name: string;
+  expertise: string[];
+  rating: number;
+  bio: string;
+}
+
+export interface ForumPost {
+  id: string;
+  title: string;
+  body: string;
+  votes: number;
+  accepted: boolean;
+}
+
+export interface ContactSubmission {
+  name: string;
+  email: string;
+  interest: string;
+}
